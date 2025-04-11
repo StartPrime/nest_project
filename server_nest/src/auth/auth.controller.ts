@@ -17,7 +17,7 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('/register')
-  async register(@Body() person: RegisterDto) {
+  register(@Body() person: RegisterDto) {
     return this.authService.register(person);
   }
 
@@ -37,7 +37,7 @@ export class AuthController {
 
   @Post('/logout')
   @HttpCode(200)
-  async logout(@Res() res: Response) {
+  logout(@Res() res: Response) {
     res.clearCookie('refreshToken');
     return res.json({ message: 'Выход успешен' });
   }

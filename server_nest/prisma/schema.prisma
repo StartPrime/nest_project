@@ -14,3 +14,23 @@ model User {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 }
+
+model Products {
+  id          Int        @id @default(autoincrement())
+  name        String
+  brand       String
+  color       String
+  description String
+  price       Decimal
+  imgUrl      String     @map("img_url")
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime   @updatedAt @map("updated_at")
+  category    Categories @relation(fields: [categoryId], references: [id])
+  categoryId  Int        @map("category_id")
+}
+
+model Categories {
+  id       Int        @id @default(autoincrement())
+  category String
+  Products Products[]
+}
