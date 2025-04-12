@@ -17,7 +17,6 @@ export class AuthService {
   ) {}
 
   async register(registerDto: RegisterDto) {
-    console.log(registerDto);
     const existingUser = await this.prisma.user.findUnique({
       where: { email: registerDto.email },
     });
@@ -29,6 +28,7 @@ export class AuthService {
     const hashedPassword = await bcrypt.hash(registerDto.password, 10);
     await this.prisma.user.create({
       data: {
+        name: registerDto.name,
         email: registerDto.email,
         password: hashedPassword,
       },
@@ -50,7 +50,6 @@ export class AuthService {
       loginDto.password,
       user.password,
     );
-    console.log(checkPassword);
     if (!checkPassword) {
       throw new NotFoundException('Неверная почта или пароль');
     }

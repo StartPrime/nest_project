@@ -9,6 +9,7 @@ datasource db {
 
 model User {
   id        Int      @id @default(autoincrement())
+  name      String
   email     String   @unique
   password  String
   createdAt DateTime @default(now()) @map("created_at")
@@ -22,7 +23,7 @@ model Products {
   color       String
   description String
   price       Decimal
-  imgUrl      String     @map("img_url")
+  imageUrl    String     @map("img_url")
   createdAt   DateTime   @default(now()) @map("created_at")
   updatedAt   DateTime   @updatedAt @map("updated_at")
   category    Categories @relation(fields: [categoryId], references: [id])
