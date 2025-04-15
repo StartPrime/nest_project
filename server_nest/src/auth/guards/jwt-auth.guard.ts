@@ -13,12 +13,14 @@ export class JwtAuthGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
     const token = request.headers.authorization?.split(' ')[1] || null;
+
     if (!token) {
       throw new UnauthorizedException('Токен не найден');
     }
 
     try {
-      await this.jwtService.verifyAsync(token);
+      const payload = await this.jwtService.verifyAsync(token);
+      request.user = payload.id;
     } catch {
       throw new UnauthorizedException('Невалидный токен');
     }

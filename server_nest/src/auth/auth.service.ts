@@ -2,6 +2,7 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
 import * as bcrypt from 'bcryptjs';
@@ -57,5 +58,22 @@ export class AuthService {
     const tokens = this.tokenService.generateTokens(user.id);
 
     return tokens;
+  }
+
+  async refresh(refreshToken: string) {
+    try {
+      const payload = this.tokenService.verifyRefreshToken(refreshToken);
+      const user = await this.prisma.user.findUnique({
+        where: { id: payload.id },
+      });
+
+      if (!user) {
+        throw new UnauthorizedException('Пользователь не найден');
+      }
+
+      return { accessToken: this.tokenService.generateAccessToken(user.id) };
+    } catch (e) {
+      throw new UnauthorizedException('Невалидный refresh token');
+    }
   }
 }

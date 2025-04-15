@@ -1,16 +1,38 @@
 import { useForm } from 'react-hook-form'
 import { LoginData } from '../../interfaces'
+import { useLoginMutation } from '../../store/api/authApi'
+import { isErrorWithMessage } from '../../utils/isErrorWithMessage'
+import { RefObject, useState } from 'react'
 
-export default function Login() {
+interface Props {
+	dialogRef: RefObject<HTMLDialogElement | null>
+}
+
+export default function Login({ dialogRef }: Props) {
 	const {
 		register: reg,
 		handleSubmit,
 		formState: { errors, isValid },
-		// reset,
+		reset,
 	} = useForm<LoginData>({ mode: 'onBlur' })
 
+	const [error, setError] = useState<string | null>(null)
+
+	const [login] = useLoginMutation()
+
 	async function onSubmit(data: LoginData) {
-		console.log(data)
+		setError(null)
+		try {
+			await login(data).unwrap()
+			dialogRef.current?.close()
+			reset()
+		} catch (error) {
+			if (isErrorWithMessage(error)) {
+				setError(error.data.message)
+			} else {
+				setError('Произошла неизвестная ошибка')
+			}
+		}
 	}
 
 	return (
@@ -123,7 +145,9 @@ export default function Login() {
 					>
 						Войти
 					</button>
-					<p className='text-center text-sm mt-2 text-red-600'></p>
+					{error && (
+						<p className='text-center text-sm mt-2 text-red-600'>{error}</p>
+					)}
 				</div>
 			</form>
 		</>

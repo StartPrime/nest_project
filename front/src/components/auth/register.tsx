@@ -1,19 +1,22 @@
 import { useForm } from 'react-hook-form'
 import { RegisterData } from '../../interfaces'
-import { useRegisterMutation, useLoginMutation } from '../../store/api/authApi'
+import { useRegisterMutation } from '../../store/api/authApi'
 import { isErrorWithMessage } from '../../utils/isErrorWithMessage'
-import { useState } from 'react'
+import { RefObject, useState } from 'react'
 
-export default function Register() {
+interface Props {
+	dialogRef: RefObject<HTMLDialogElement | null>
+}
+
+export default function Register({ dialogRef }: Props) {
 	const {
 		register: reg,
 		handleSubmit,
 		formState: { errors, isValid },
-		// reset,
+		reset,
 	} = useForm<RegisterData>({ mode: 'onBlur' })
 
 	const [register] = useRegisterMutation()
-	const [login] = useLoginMutation()
 
 	const [error, setError] = useState<string | null>(null)
 
@@ -21,12 +24,8 @@ export default function Register() {
 		setError(null)
 		try {
 			await register(data).unwrap()
-
-			const res = await login({
-				email: data.email,
-				password: data.password,
-			}).unwrap()
-			localStorage.setItem('accessToken', res.accessToken)
+			reset()
+			dialogRef.current?.close()
 		} catch (error) {
 			if (isErrorWithMessage(error)) {
 				setError(error.data.message)

@@ -2,15 +2,15 @@ import {
   Body,
   Controller,
   HttpCode,
+  NotFoundException,
   Post,
+  Req,
   Res,
-  UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
-import { Response } from 'express';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { Response, Request } from 'express';
 
 @Controller('auth')
 export class AuthController {
@@ -40,5 +40,14 @@ export class AuthController {
   logout(@Res() res: Response) {
     res.clearCookie('refreshToken');
     return res.json({ message: 'Выход успешен' });
+  }
+
+  @Post('/refresh')
+  @HttpCode(200)
+  async refreshAccessToken(@Req() req: Request) {
+    if (!req.cookies.refreshToken) {
+      throw new NotFoundException('Refresh токен не найден');
+    }
+    return this.authService.refresh(req.cookies.refreshToken);
   }
 }
