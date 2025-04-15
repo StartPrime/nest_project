@@ -14,6 +14,7 @@ export const favoritesSlice = createSlice({
 	initialState,
 	reducers: {
 		addFavorite(state, action: PayloadAction<Product>) {
+			console.log(action.payload)
 			state.products.push(action.payload)
 		},
 

@@ -14,9 +14,11 @@ export default function Product({ product }: Props) {
 	const navigate = useNavigate()
 	const dispatch = useDispatch()
 
-	const products = useSelector((state: RootState) => state.favorites.products)
-	const isFavorite = products.filter(item => item.id === product.id)
-	console.log(isFavorite)
+	const products = useSelector(
+		(state: RootState) => state.persistedReducer.favorites.products
+	)
+	const isFavorite =
+		products && products.filter(item => item.id === product.id).length
 
 	return (
 		<article
@@ -46,14 +48,18 @@ export default function Product({ product }: Props) {
 					{product.price} ₽
 				</p>
 			</div>
-			{isFavorite ? (
+			{!isFavorite ? (
 				<CiHeart
 					size={30}
 					className='absolute top-4 right-4 text-orange-400'
 					onClick={() => dispatch(addFavorite(product))}
 				/>
 			) : (
-				<FaHeart size={30} className='absolute top-4 right-4 text-orange-400' />
+				<FaHeart
+					size={25}
+					className='absolute top-5 right-5 text-orange-400'
+					onClick={() => dispatch(removeFavorite(product.id))}
+				/>
 			)}
 		</article>
 	)

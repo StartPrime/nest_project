@@ -7,12 +7,23 @@ import Auth from './auth/auth'
 import { useGetUserDataQuery } from '../store/api/userApi'
 import { IoExitOutline } from 'react-icons/io5'
 import { useLogoutMutation } from '../store/api/authApi'
+import { useSelector } from 'react-redux'
+import { RootState } from '../store/store'
+import { useNavigate } from 'react-router-dom'
 
 export default function Header() {
 	const dialogRef = useRef<HTMLDialogElement | null>(null)
+
 	const { data, isLoading } = useGetUserDataQuery()
 	const userName = data?.name
+
 	const [logout] = useLogoutMutation(undefined)
+
+	const navigate = useNavigate()
+
+	const favoritesCount = useSelector(
+		(state: RootState) => state.persistedReducer.favorites.products.length
+	)
 
 	const handleLogout = async () => {
 		const res = confirm('Вы действительно хотите выйти из аккаунта?')
@@ -53,11 +64,19 @@ export default function Header() {
 								/>
 							</div>
 						)}
-						<div className='relative cursor-pointer'>
+						<div
+							className='relative cursor-pointer'
+							onClick={() => navigate('/favorites')}
+						>
 							<FaRegHeart size={30} />
-							<p className='absolute top-0 -right-3 z-10 text-white bg-orange-400 rounded-full w-6 h-6 flex items-center justify-center text-xs'>
-								10
-							</p>
+							{favoritesCount > 0 && (
+								<p
+									className='absolute top-0 -right-3 z-10 text-white bg-orange-400 rounded-full w-6 h-6 flex 
+								items-center justify-center text-xs'
+								>
+									{favoritesCount}
+								</p>
+							)}
 						</div>
 						<div className='relative cursor-pointer'>
 							<GrBasket size={30} />
