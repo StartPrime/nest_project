@@ -12,7 +12,6 @@ export default function Header() {
 	const dialogRef = useRef<HTMLDialogElement | null>(null)
 	const { data, isLoading } = useGetUserDataQuery()
 	const userName = data?.name
-	console.log(userName)
 	const [logout] = useLogoutMutation(undefined)
 
 	const handleLogout = async () => {
