@@ -1,11 +1,20 @@
 import { GrBasket } from 'react-icons/gr'
 import { Product as IProduct } from '../interfaces'
+import { useDispatch, useSelector } from 'react-redux'
+import { addProduct, removeProduct } from '../store/slices/basketReducer'
+import { RootState } from '../store/store'
 
 interface Props {
 	product: IProduct
 }
 
 export default function Product({ product }: Props) {
+	const dispatch = useDispatch()
+	const productCount = useSelector((state: RootState) =>
+		state.persistedReducer.basket.products.find(
+			item => item.product.id === product.id
+		)
+	)?.count
 	return (
 		<div className='bg-white rounded-4xl shadow-lg overflow-hidden'>
 			<div className='grid grid-cols-1 md:grid-cols-2 gap-8'>
@@ -39,10 +48,31 @@ export default function Product({ product }: Props) {
 								title={product.color}
 							/>
 						</div>
-						<button className='w-full bg-orange-400 text-white py-3 px-6 rounded-lg flex items-center justify-center gap-2 cursor-pointer'>
-							<GrBasket />
-							Добавить в корзину
-						</button>
+						{!productCount ? (
+							<button
+								className='w-full bg-orange-400 text-white py-3 px-6 rounded-4xl flex items-center justify-center gap-2 cursor-pointer'
+								onClick={() => dispatch(addProduct(product))}
+							>
+								<GrBasket />
+								Добавить в корзину
+							</button>
+						) : (
+							<div className='flex gap-4 items-center'>
+								<div
+									className='bg-orange-400 py-1 px-6 rounded-4xl text-white flex justify-center items-center cursor-pointer'
+									onClick={() => dispatch(addProduct(product))}
+								>
+									+
+								</div>
+								<p>{productCount}</p>
+								<div
+									className='bg-orange-400 py-1 px-6 rounded-4xl text-white  flex justify-center items-center cursor-pointer'
+									onClick={() => dispatch(removeProduct(product.id))}
+								>
+									-
+								</div>
+							</div>
+						)}
 						<div className='pt-6 border-t border-gray-200'>
 							<h2 className='text-xl font-medium text-gray-900 mb-4'>
 								Описание

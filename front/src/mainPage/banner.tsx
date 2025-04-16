@@ -3,7 +3,7 @@ import Container from '../components/container'
 export default function Banner() {
 	return (
 		<Container>
-			<article className='min-[760px]:h-[200px] bg-black rounded-4xl flex mt-12 px-2'>
+			<article className='min-[760px]:max-h-[200px] bg-black rounded-4xl flex mt-12 px-2 w-full'>
 				<div className='flex w-[50%] justify-center items-center'>
 					<p className='text-white min-[840px]:text-2xl max-sm:text-xs font-bold text-center'>
 						Широкий выбор техники Apple

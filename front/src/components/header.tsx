@@ -10,6 +10,7 @@ import { useLogoutMutation } from '../store/api/authApi'
 import { useSelector } from 'react-redux'
 import { RootState } from '../store/store'
 import { useNavigate } from 'react-router-dom'
+import { selectBasketTotalItems } from '../store/slices/basketReducer'
 
 export default function Header() {
 	const dialogRef = useRef<HTMLDialogElement | null>(null)
@@ -25,6 +26,8 @@ export default function Header() {
 		(state: RootState) => state.persistedReducer.favorites.products.length
 	)
 
+	const basketCount = useSelector(selectBasketTotalItems)
+
 	const handleLogout = async () => {
 		const res = confirm('Вы действительно хотите выйти из аккаунта?')
 		if (!res) return
@@ -39,7 +42,12 @@ export default function Header() {
 		<header>
 			<Container>
 				<div className='flex justify-between pt-4'>
-					<h1 className='sm:text-4xl text-2xl font-bold'>QPICK</h1>
+					<h1
+						className='sm:text-4xl text-2xl font-bold cursor-pointer'
+						onClick={() => navigate('/')}
+					>
+						QPICK
+					</h1>
 					<div className='flex gap-8 items-center'>
 						{isLoading ? (
 							<div className='animate-pulse bg-gray-200 w-24 h-10 rounded-full' />
@@ -78,11 +86,16 @@ export default function Header() {
 								</p>
 							)}
 						</div>
-						<div className='relative cursor-pointer'>
+						<div
+							className='relative cursor-pointer'
+							onClick={() => navigate('/basket')}
+						>
 							<GrBasket size={30} />
-							<p className='absolute top-0 -right-3 z-10 text-white bg-orange-400 rounded-full w-6 h-6 flex items-center justify-center text-xs'>
-								1
-							</p>
+							{basketCount > 0 && (
+								<p className='absolute top-0 -right-3 z-10 text-white bg-orange-400 rounded-full w-6 h-6 flex items-center justify-center text-xs'>
+									{basketCount}
+								</p>
+							)}
 						</div>
 					</div>
 				</div>

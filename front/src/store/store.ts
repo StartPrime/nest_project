@@ -15,16 +15,18 @@ import {
 	REGISTER,
 	persistStore,
 } from 'redux-persist'
+import basketReducer from './slices/basketReducer'
 
 const rootReducer = combineReducers({
 	user: userReducer,
 	favorites: favoritesReducer,
+	basket: basketReducer,
 })
 
 const persistConfig = {
 	key: 'root',
 	storage,
-	whitelist: ['favorites'],
+	whitelist: ['favorites', 'basket'],
 }
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
