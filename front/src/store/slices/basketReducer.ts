@@ -1,11 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { Product } from '../../interfaces'
 import { RootState } from '../store'
-
-interface BasketState {
-	product: Product
-	count: number
-}
+import { BasketState } from '../../interfaces'
 
 interface Products {
 	products: BasketState[]

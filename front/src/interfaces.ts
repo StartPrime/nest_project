@@ -29,3 +29,8 @@ export interface UserData {
 	name: string
 	email: string
 }
+
+export interface BasketState {
+	product: Product
+	count: number
+}
