@@ -31,21 +31,23 @@ export default function Favorites({ product }: Props) {
 					alt={product.name}
 				/>
 			</div>
-			<div className='flex-1 min-w-0'>
-				<p className='text-base font-medium text-gray-900 line-clamp-2'>
-					{product.name}
-				</p>
-			</div>
-			<div className='flex items-center gap-4'>
-				<span className='text-lg font-semibold text-orange-400 whitespace-nowrap'>
-					{product.price} ₽
-				</span>
-				<button
-					onClick={e => handleRemoveFavorite(e, product.id)}
-					className='p-2 hover:bg-gray-100 rounded-full cursor-pointer'
-				>
-					<FaRegTrashCan size={20} className='text-red-600' />
-				</button>
+			<div className='flex justify-between w-full min-[400px]:items-center max-[400px]:flex-col'>
+				<div className='flex-1 min-w-0'>
+					<p className='text-base font-medium text-gray-900 line-clamp-2'>
+						{product.name}
+					</p>
+				</div>
+				<div className='flex items-center gap-4 max-[400px]:justify-between'>
+					<span className='text-lg font-semibold text-orange-400 whitespace-nowrap'>
+						{product.price} ₽
+					</span>
+					<button
+						onClick={e => handleRemoveFavorite(e, product.id)}
+						className='p-2 hover:bg-gray-100 rounded-full cursor-pointer'
+					>
+						<FaRegTrashCan size={20} className='text-red-600' />
+					</button>
+				</div>
 			</div>
 		</article>
 	)

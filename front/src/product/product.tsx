@@ -3,6 +3,9 @@ import { Product as IProduct } from '../interfaces'
 import { useDispatch, useSelector } from 'react-redux'
 import { addProduct, removeProduct } from '../store/slices/basketReducer'
 import { RootState } from '../store/store'
+import { addFavorite, removeFavorite } from '../store/slices/favoritesReducer'
+import { CiHeart } from 'react-icons/ci'
+import { FaHeart } from 'react-icons/fa'
 
 interface Props {
 	product: IProduct
@@ -15,8 +18,17 @@ export default function Product({ product }: Props) {
 			item => item.product.id === product.id
 		)
 	)?.count
+
+	const isFavorite = useSelector((state: RootState) =>
+		state.persistedReducer.favorites.products?.filter(
+			item => item.id === product.id
+		)
+	)
+
+	console.log(isFavorite)
+
 	return (
-		<div className='bg-white rounded-4xl shadow-lg overflow-hidden'>
+		<div className='bg-white rounded-4xl shadow-lg overflow-hidden relative'>
 			<div className='grid grid-cols-1 md:grid-cols-2 gap-8'>
 				{/* Изображение товара */}
 				<div className='p-6 md:p-8'>
@@ -84,6 +96,19 @@ export default function Product({ product }: Props) {
 					</div>
 				</div>
 			</div>
+			{isFavorite.length === 0 ? (
+				<CiHeart
+					size={30}
+					className='absolute top-4 right-4 text-orange-400 cursor-pointer'
+					onClick={() => dispatch(addFavorite(product))}
+				/>
+			) : (
+				<FaHeart
+					size={25}
+					className='absolute top-5 right-5 text-orange-400 cursor-pointer	'
+					onClick={() => dispatch(removeFavorite(product.id))}
+				/>
+			)}
 		</div>
 	)
 }
