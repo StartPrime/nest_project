@@ -5,6 +5,7 @@ import Header from './components/header'
 import Footer from './components/footer'
 import Favorites from './favorites/favoritesContainer'
 import Basket from './basket/basket'
+import Contacts from './contacts/contacts'
 
 export default function App() {
 	return (
@@ -17,6 +18,7 @@ export default function App() {
 						<Route path='/products/:id' element={<ProductPage />} />
 						<Route path='/favorites' element={<Favorites />} />
 						<Route path='/basket' element={<Basket />} />
+						<Route path='/contacts' element={<Contacts />} />
 					</Routes>
 				</div>
 				<Footer />

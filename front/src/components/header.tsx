@@ -48,7 +48,7 @@ export default function Header() {
 					>
 						QPICK
 					</h1>
-					<div className='flex gap-8 items-center'>
+					<div className='flex gap-8 items-center sm:flex-row flex-col'>
 						{isLoading ? (
 							<div className='animate-pulse bg-gray-200 w-24 h-10 rounded-full' />
 						) : !userName ? (
@@ -72,30 +72,32 @@ export default function Header() {
 								/>
 							</div>
 						)}
-						<div
-							className='relative cursor-pointer'
-							onClick={() => navigate('/favorites')}
-						>
-							<FaRegHeart size={30} />
-							{favoritesCount > 0 && (
-								<p
-									className='absolute top-0 -right-3 z-10 text-white bg-orange-400 rounded-full w-6 h-6 flex 
-								items-center justify-center text-xs'
-								>
-									{favoritesCount}
-								</p>
-							)}
-						</div>
-						<div
-							className='relative cursor-pointer'
-							onClick={() => navigate('/basket')}
-						>
-							<GrBasket size={30} />
-							{basketCount > 0 && (
-								<p className='absolute top-0 -right-3 z-10 text-white bg-orange-400 rounded-full w-6 h-6 flex items-center justify-center text-xs'>
-									{basketCount}
-								</p>
-							)}
+						<div className='flex gap-8'>
+							<div
+								className='relative cursor-pointer'
+								onClick={() => navigate('/favorites')}
+							>
+								<FaRegHeart size={30} />
+								{favoritesCount > 0 && (
+									<p
+										className='absolute top-0 -right-3 z-10 text-white bg-orange-400 rounded-full w-6 h-6 flex
+									items-center justify-center text-xs'
+									>
+										{favoritesCount}
+									</p>
+								)}
+							</div>
+							<div
+								className='relative cursor-pointer'
+								onClick={() => navigate('/basket')}
+							>
+								<GrBasket size={30} />
+								{basketCount > 0 && (
+									<p className='absolute top-0 -right-3 z-10 text-white bg-orange-400 rounded-full w-6 h-6 flex items-center justify-center text-xs'>
+										{basketCount}
+									</p>
+								)}
+							</div>
 						</div>
 					</div>
 				</div>

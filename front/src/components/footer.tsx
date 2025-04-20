@@ -21,7 +21,9 @@ export default function Footer() {
 						<p className='cursor-pointer' onClick={() => navigate('/basket')}>
 							Корзина
 						</p>
-						<p className='cursor-pointer'>Контакты</p>
+						<p className='cursor-pointer' onClick={() => navigate('/contacts')}>
+							Контакты
+						</p>
 					</nav>
 					<div className='flex gap-4 flex-wrap'>
 						<FaVk className='cursor-pointer sm:size-7 size-5' />
