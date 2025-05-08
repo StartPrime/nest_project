@@ -6,28 +6,101 @@ import { RootState } from '../store/store'
 import { addFavorite, removeFavorite } from '../store/slices/favoritesReducer'
 import { CiHeart } from 'react-icons/ci'
 import { FaHeart } from 'react-icons/fa'
-import { AiTwotoneDislike } from 'react-icons/ai'
-import { AiTwotoneLike } from 'react-icons/ai'
+import { AiTwotoneDislike, AiTwotoneLike } from 'react-icons/ai'
+import { useEffect, useState } from 'react'
 
 interface Props {
 	product: IProduct
 }
 
+interface ReactionState {
+	isLiked: boolean
+	isDisliked: boolean
+	likes: number
+	dislikes: number
+}
+
 export default function Product({ product }: Props) {
 	const dispatch = useDispatch()
+
+	// Получаем данные о товаре в корзине
 	const productCount = useSelector((state: RootState) =>
 		state.persistedReducer.basket.products.find(
 			item => item.product.id === product.id
 		)
 	)?.count
 
+	// Проверяем, есть ли товар в избранном
 	const isFavorite = useSelector((state: RootState) =>
 		state.persistedReducer.favorites.products?.filter(
 			item => item.id === product.id
 		)
 	)
 
-	console.log(isFavorite)
+	// Состояние для реакций
+	const [reactions, setReactions] = useState<ReactionState>({
+		isLiked: false,
+		isDisliked: false,
+		likes: product.likes || 0,
+		dislikes: product.dislikes || 0,
+	})
+
+	// Загружаем реакции из localStorage при монтировании
+	useEffect(() => {
+		const savedReactions = localStorage.getItem(
+			`product_${product.id}_reactions`
+		)
+		if (savedReactions) {
+			setReactions(JSON.parse(savedReactions))
+		}
+	}, [product.id])
+
+	// Сохраняем реакции в localStorage при изменении
+	useEffect(() => {
+		localStorage.setItem(
+			`product_${product.id}_reactions`,
+			JSON.stringify(reactions)
+		)
+	}, [reactions, product.id])
+
+	// Обработчики лайков/дизлайков
+	const handleLike = () => {
+		setReactions(prev => {
+			if (prev.isLiked) {
+				return {
+					...prev,
+					isLiked: false,
+					likes: prev.likes - 1,
+				}
+			} else {
+				return {
+					isLiked: true,
+					isDisliked: false,
+					likes: prev.likes + 1,
+					dislikes: prev.isDisliked ? prev.dislikes - 1 : prev.dislikes,
+				}
+			}
+		})
+	}
+
+	const handleDislike = () => {
+		setReactions(prev => {
+			if (prev.isDisliked) {
+				return {
+					...prev,
+					isDisliked: false,
+					dislikes: prev.dislikes - 1,
+				}
+			} else {
+				return {
+					isDisliked: true,
+					isLiked: false,
+					dislikes: prev.dislikes + 1,
+					likes: prev.isLiked ? prev.likes - 1 : prev.likes,
+				}
+			}
+		})
+	}
 
 	return (
 		<div className='bg-white rounded-4xl shadow-lg overflow-hidden relative'>
@@ -107,18 +180,30 @@ export default function Product({ product }: Props) {
 			) : (
 				<FaHeart
 					size={25}
-					className='absolute top-5 right-5 text-orange-400 cursor-pointer	'
+					className='absolute top-5 right-5 text-orange-400 cursor-pointer'
 					onClick={() => dispatch(removeFavorite(product.id))}
 				/>
 			)}
 			<div className='absolute bottom-4 right-4 flex gap-4'>
 				<div className='flex gap-2 items-center'>
-					<p>{product.dislikes}</p>
-					<AiTwotoneDislike size={30} className='cursor-pointer' />
+					<p>{reactions.dislikes}</p>
+					<AiTwotoneDislike
+						size={30}
+						className={`cursor-pointer ${
+							reactions.isDisliked ? 'text-red-500' : 'text-gray-400'
+						}`}
+						onClick={handleDislike}
+					/>
 				</div>
 				<div className='flex gap-2 items-center'>
-					<p>{product.dislikes}</p>
-					<AiTwotoneLike size={30} className='cursor-pointer' />
+					<p>{reactions.likes}</p>
+					<AiTwotoneLike
+						size={30}
+						className={`cursor-pointer ${
+							reactions.isLiked ? 'text-green-500' : 'text-gray-400'
+						}`}
+						onClick={handleLike}
+					/>
 				</div>
 			</div>
 		</div>
