@@ -1,4 +1,3 @@
-// src/api/userApi.ts
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { UserData } from '../../interfaces'
 import { baseQueryApi } from './baseQuery'

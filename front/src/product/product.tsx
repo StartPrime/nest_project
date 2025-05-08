@@ -6,6 +6,8 @@ import { RootState } from '../store/store'
 import { addFavorite, removeFavorite } from '../store/slices/favoritesReducer'
 import { CiHeart } from 'react-icons/ci'
 import { FaHeart } from 'react-icons/fa'
+import { AiTwotoneDislike } from 'react-icons/ai'
+import { AiTwotoneLike } from 'react-icons/ai'
 
 interface Props {
 	product: IProduct
@@ -109,6 +111,16 @@ export default function Product({ product }: Props) {
 					onClick={() => dispatch(removeFavorite(product.id))}
 				/>
 			)}
+			<div className='absolute bottom-4 right-4 flex gap-4'>
+				<div className='flex gap-2 items-center'>
+					<p>{product.dislikes}</p>
+					<AiTwotoneDislike size={30} className='cursor-pointer' />
+				</div>
+				<div className='flex gap-2 items-center'>
+					<p>{product.dislikes}</p>
+					<AiTwotoneLike size={30} className='cursor-pointer' />
+				</div>
+			</div>
 		</div>
 	)
 }

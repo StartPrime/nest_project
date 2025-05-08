@@ -49,6 +49,9 @@ export default function Header() {
 						QPICK
 					</h1>
 					<div className='flex gap-8 items-center sm:flex-row flex-col'>
+						<p onClick={() => navigate('/contacts')} className='cursor-pointer'>
+							Контакты
+						</p>
 						{isLoading ? (
 							<div className='animate-pulse bg-gray-200 w-24 h-10 rounded-full' />
 						) : !userName ? (

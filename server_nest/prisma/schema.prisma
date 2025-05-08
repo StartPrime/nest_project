@@ -28,6 +28,8 @@ model Products {
   updatedAt   DateTime   @updatedAt @map("updated_at")
   category    Categories @relation(fields: [categoryId], references: [id])
   categoryId  Int        @map("category_id")
+  likes       Int        @default(0)
+  dislikes    Int        @default(0)
 }
 
 model Categories {

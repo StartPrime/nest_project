@@ -17,6 +17,8 @@ export class ProductsService {
         description: true,
         price: true,
         imageUrl: true,
+        likes: true,
+        dislikes: true,
         category: {
           select: {
             id: true,
@@ -83,6 +85,8 @@ export class ProductsService {
         description: true,
         price: true,
         imageUrl: true,
+        likes: true,
+        dislikes: true,
       },
     });
     if (!product) {

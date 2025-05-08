@@ -6,6 +6,8 @@ export interface Product {
 	color: string
 	description: string
 	imageUrl: string
+	likes: number
+	dislikes: number
 }
 
 export interface Category {
